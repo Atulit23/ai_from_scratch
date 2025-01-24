@@ -46,7 +46,6 @@ class LSTMOptimizer (object):
                 
     def _update_rule (self, **kwargs):
         raise NotImplementedError()
-    
 
 class SGD(LSTMOptimizer):
     def __init__(self, lr=0.01, gradient_clipping=True):
@@ -156,7 +155,7 @@ class LSTMNode:
         self.C_out = self.f * C_in + self.i * self.C_bar
         self.o_int = np.dot(self.Z, params_dict['W_o']['value'] + params_dict['B_o']['value'])
         
-        self.o = sigmoid (self.o_int)
+        self.o = sigmoid(self.o_int)
         
         self.H_out = self.o * tanh (self.C_out)
         
@@ -278,7 +277,6 @@ class LSTMLayer:
     def _clear_gradients(self):
         for key in self.params.keys():
             self.params[key]['deriv'] = np.zeros_like(self.params[key]['deriv'])
-                    
         
     def forward(self, x_seq_in: ndarray):
         if self.first:
@@ -331,7 +329,6 @@ class LSTMLayer:
             x_seq_in_grad[:, t, :] = grad_out
         
         return x_seq_in_grad
-    
 
 class LSTMModel(object):
     def __init__(self, 
@@ -476,7 +473,6 @@ class LSTMTrainer:
                 self._generate_one_hot_array(inputs_indices), self._generate_one_hot_array(targets_indices)
             
             loss = self.model.single_step(inputs_batch, targets_batch)
-            print(loss)
             self.optim.step()
             
             moving_average.append(loss)
