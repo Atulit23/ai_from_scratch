@@ -153,7 +153,7 @@ d_model = 256
 num_classes = 7
 num_layers = 2
 lr = 1e-3
-epochs = 100
+epochs = 50
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -185,18 +185,3 @@ for epoch in range(epochs):
 
 torch.save(model.state_dict(), 'model.pth')
 
-model.eval()
-with torch.no_grad():
-    out = model(X, dist_matrix)
-    pred = out.argmax(dim=1)
-
-    val_correct = (pred[graph_data["val_mask"]] == y[graph_data["val_mask"]]).sum().item()
-    val_total = graph_data["val_mask"].sum().item()
-    val_acc = val_correct / val_total
-
-    test_correct = (pred[graph_data["test_mask"]] == y[graph_data["test_mask"]]).sum().item()
-    test_total = graph_data["test_mask"].sum().item()
-    test_acc = test_correct / test_total
-
-    print(f"\nValidation Accuracy: {val_acc * 100:.2f}%")
-    print(f"Test Accuracy: {test_acc * 100:.2f}%")
